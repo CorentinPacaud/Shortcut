@@ -26,6 +26,8 @@ public class CircleBarView extends View {
     double angle;
     double mFps = 60;
 
+    boolean isPlaying = false;
+
     public CircleBarView(Context context) {
         super(context);
         init();
@@ -101,11 +103,21 @@ public class CircleBarView extends View {
             mPreviusRadius[i] = mPreviusRadius[i] + (1 / mFps) * mSpeed[i] * (mDirection[i] ? 1 : -1);
         }
 
-        mHandler.postDelayed(mRunnable, (long) (1000 / mFps));
+        if (isPlaying)
+            mHandler.postDelayed(mRunnable, (long) (1000 / mFps));
     }
 
-    @Override
-    protected void onAnimationStart() {
-        super.onAnimationStart();
+    public boolean isPlaying() {
+        return isPlaying;
+    }
+
+    public void play() {
+        isPlaying = true;
+        postInvalidate();
+    }
+
+    public void stop() {
+        isPlaying = false;
+        postInvalidate();
     }
 }

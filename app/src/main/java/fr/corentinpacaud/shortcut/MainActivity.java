@@ -1,25 +1,22 @@
 package fr.corentinpacaud.shortcut;
 
-import android.media.MediaMetadataRetriever;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    private CircleBarView mCircleBarView;
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MediaPlayer mpintro;
+        /*MediaPlayer mpintro;
 
         mpintro = MediaPlayer.create(this, Uri.parse(Environment.getExternalStorageDirectory().getPath() + "/Music/01 - Loud Like Love.mp3"));
         mpintro.setLooping(true);
@@ -29,16 +26,27 @@ public class MainActivity extends AppCompatActivity {
         mediaMetadataRetriever.setDataSource(this, Uri.parse(Environment.getExternalStorageDirectory().getPath() + "/Music/01 - Loud Like Love.mp3"));
 
         File f = new File(Environment.getExternalStorageDirectory().getPath() + "/Music/01 - Loud Like Love.mp3");
-        try {
-            FileInputStream fileInputStream = new FileInputStream(f);
-            byte[] data;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+*/
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mCircleBarView = (CircleBarView) findViewById(R.id.circleBarView);
 
-        Log.d("Caca", "bitrate : " + mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE));
-        Log.d("Caca", "duration (ms): " + mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
-        Log.d("Caca", "hasAudio : " + mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO));
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleAnimation();
+            }
+        });
+
+    }
+
+    private void toggleAnimation() {
+        if (mCircleBarView.isPlaying) {
+            mCircleBarView.stop();
+            mFab.setImageResource(R.drawable.ic_play_arrow_white_24dp);
+        } else {
+            mCircleBarView.play();
+            mFab.setImageResource(R.drawable.ic_pause_white_24dp);
+        }
     }
 
 
