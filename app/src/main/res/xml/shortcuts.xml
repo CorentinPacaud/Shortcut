@@ -1,0 +1,19 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="compose"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/label_short"
+        android:shortcutLongLabel="@string/label_long"
+        android:shortcutDisabledMessage="@string/label_disabled">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="fr.corentinpacaud.shortcut"
+            android:targetClass="fr.corentinpacaud.shortcut.MainActivity" />
+        <!-- If your shortcut is associated with multiple intents, include them
+             here. The last intent in the list determines what the user sees when
+             they launch this shortcut. -->
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+    <!-- Specify more shortcuts here. -->
+</shortcuts>
