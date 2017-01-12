@@ -25,6 +25,7 @@ public class CircleBarView extends View {
     boolean[] mDirection;
     double angle;
     double mFps = 60;
+    double mMinSize = 0.5d;
 
     boolean isPlaying = false;
 
@@ -67,7 +68,7 @@ public class CircleBarView extends View {
         mDirection = new boolean[mNbBar];
 
         for (int i = 0; i < mPreviusRadius.length; i++) {
-            mPreviusRadius[i] = Math.random() + 0.5d;
+            mPreviusRadius[i] = mMinSize;
             Log.d(LOG_TAG, "rad : " + mPreviusRadius[i]);
             mSpeed[i] = (Math.random() + 1d) * 3d;
             mDirection[i] = (Math.random() * 2) > 1;
@@ -85,12 +86,19 @@ public class CircleBarView extends View {
 
         double radius = (Math.min(getWidth(), getHeight()) / 2);
 
+        boolean end = true;
+
+
         for (int i = 0; i < mNbBar; i++) {
 
             if (mPreviusRadius[i] < 0.5) {
                 mDirection[i] = true;
             }
             if (mPreviusRadius[i] > 1) {
+                mDirection[i] = false;
+            }
+
+            if (!isPlaying) {
                 mDirection[i] = false;
             }
 
@@ -101,9 +109,11 @@ public class CircleBarView extends View {
             canvas.drawCircle(centerX, centerY, ((float) radius) * 0.5f, mPaint);
 
             mPreviusRadius[i] = mPreviusRadius[i] + (1 / mFps) * mSpeed[i] * (mDirection[i] ? 1 : -1);
+            if (!isPlaying && mPreviusRadius[i] > mMinSize)
+                end = false;
         }
 
-        if (isPlaying)
+        if (isPlaying || !end)
             mHandler.postDelayed(mRunnable, (long) (1000 / mFps));
     }
 
