@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircleBarView">
+        <attr name="nbBars" format="integer"/>
+        <attr name="maxSpeed" format="float"/>
+        <attr name="minSpeed" format="float"/>
+        <attr name="minSize" format="dimension"/>
+        <!-- Min color : the color when the bars are at the minimum of their size. if no maxColor, maxColor = minColor -->
+        <attr name="minColor" format="color"/>
+        <attr name="maxColor" format="color"/>
+    </declare-styleable>
+</resources>

@@ -1,9 +1,11 @@
 package fr.corentinpacaud.shortcut;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Build;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -20,48 +22,77 @@ public class CircleBarView extends View {
     Paint mPaint;
     Handler mHandler;
     Runnable mRunnable;
-    int mNbBar = 20;
+    int mNbBar;
     double[] mPreviusRadius;
     double[] mSpeed;
     boolean[] mDirection;
     Paint[] mBarPaint;
     double angle;
     double mFps = 60;
-    double mMinSize = 0.7d;
-    double mMainSpeed = 2d;
-    double mMinSpeed = 1d;
 
-    int mMainColor = getResources().getColor(android.R.color.holo_red_dark);
-    int mMaxColor = getResources().getColor(R.color.blue_light);
-    int mMinColor = getResources().getColor(R.color.blue);
+    double mMinSize;
+    double mMaxSpeed;
+    double mMinSpeed;
+
+    int mMaxColor;
+    /**
+     * See
+     */
+    int mMinColor;
 
     boolean isPlaying = false;
 
     public CircleBarView(Context context) {
         super(context);
-        init();
+        init(context, null);
     }
 
     public CircleBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context, attrs);
 
     }
 
     public CircleBarView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context, attrs);
     }
 
     public CircleBarView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
+        init(context, attrs);
     }
 
 
-    private void init() {
+    private void init(Context context, AttributeSet attrs) {
+
+        TypedArray a = context.getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.CircleBarView,
+                0, 0);
+
+        try {
+
+            mNbBar = a.getInt(R.styleable.CircleBarView_nbBars, 10);
+            mMinSize = a.getDimensionPixelSize(R.styleable.CircleBarView_minSize, 0);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mMinColor = a.getColor(R.styleable.CircleBarView_minColor, getResources().getColor(R.color.colorAccent, null));
+            } else {
+                //noinspection deprecation
+                mMinColor = a.getColor(R.styleable.CircleBarView_minColor, getResources().getColor(R.color.colorAccent));
+            }
+            mMaxColor = a.getColor(R.styleable.CircleBarView_minColor, mMinColor);
+
+            mMinSpeed = a.getFloat(R.styleable.CircleBarView_minSpeed, 1f);
+            mMaxSpeed = a.getFloat(R.styleable.CircleBarView_maxSpeed, 2f);
+
+
+        } finally {
+            a.recycle();
+        }
+
         mPaint = new Paint();
-        mPaint.setColor(mMainColor);
         mPaint.setStrokeWidth(30f);
 
         mHandler = new Handler();
@@ -90,12 +121,18 @@ public class CircleBarView extends View {
     }
 
     private double randomSpeed() {
-        return (Math.random() + mMinSpeed) * mMainSpeed;
+        return (Math.random() + mMinSpeed) * mMaxSpeed;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        Log.d(LOG_TAG, "W:" + (getWidth() / 2) + "  minSize:" + mMinSize);
+
+        if (getWidth() / 2 < mMinSize) {
+            throw new IllegalArgumentException("minSize is too big, it should be lower than half the size of the CircleBarView");
+        }
 
         float centerX = getWidth() / 2f;
         float centerY = getHeight() / 2f;
@@ -126,7 +163,7 @@ public class CircleBarView extends View {
             float destX = (float) ((float) Math.cos(angle * i) * radius * mPreviusRadius[i] + centerX);
             float destY = (float) ((float) Math.sin(angle * i) * radius * mPreviusRadius[i] + centerY);
 
-            double percent = (mPreviusRadius[i] - mMinSize) / (1 - mMinSize);
+            double percent = ((mPreviusRadius[i] * (getWidth() / 2)) - mMinSize) / ((getWidth() / 2) - mMinSize);
 
             if (percent < 0)
                 percent = 0;
@@ -150,7 +187,7 @@ public class CircleBarView extends View {
 
             canvas.drawLine(centerX, centerY, destX, destY, mBarPaint[i]);
 
-            mPreviusRadius[i] = mPreviusRadius[i] + (1 / mFps) * mSpeed[i] * (mDirection[i] ? 1 : -1);
+            mPreviusRadius[i] = mPreviusRadius[i] + ((getWidth()/2) / mFps) * mSpeed[i] * (mDirection[i] ? 1 : -1);
             if (!isPlaying && mPreviusRadius[i] > mMinSize)
                 end = false;
         }

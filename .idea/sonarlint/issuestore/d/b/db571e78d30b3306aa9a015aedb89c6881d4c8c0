@@ -1,5 +1,5 @@
 
-’ squid:MethodCyclomaticComplexity"\The Cyclomatic Complexity of this method "onDraw" is 14 which is greater than 10 authorized.(ÕÆ¾ùıÿÿÿÿ8¹í¨™+
-Osquid:UselessParenthesesCheck"!Remove those useless parentheses.(Ã™«·8ÈöŞ•™+
-ssquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(ÕÆ¾ùıÿÿÿÿ8‚¼©™+
+Hsquid:UselessParenthesesCheck"!Remove those useless parentheses.(Ã™«·
+‹ squid:MethodCyclomaticComplexity"\The Cyclomatic Complexity of this method "onDraw" is 15 which is greater than 10 authorized.(ÕÆ¾ùıÿÿÿÿ
+lsquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(ÕÆ¾ùıÿÿÿÿ
 Hsquid:UselessParenthesesCheck"!Remove those useless parentheses.(¦æƒ‹

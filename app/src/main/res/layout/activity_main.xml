@@ -18,9 +18,14 @@
         android:text="Hello World!"/>
 
     <fr.corentinpacaud.shortcut.CircleBarView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_centerVertical="true"
+        app:minSpeed="1"
+        app:maxSpeed="1"
+        app:minSize="1dp"
+        app:nbBars="12"
+        app:minColor="@color/blue"
         android:layout_centerHorizontal="true"
         android:id="@+id/circleBarView"/>
 
